@@ -19,7 +19,21 @@
         :columns="columns"
         class="flex-1"
         :ui="{ tr: ' py-1 px-4' }"
-      />
+      >
+        <template #motorista-cell="{ row }">
+          <USelect
+            placeholder="Selecione"
+            :items="[
+              'Rone',
+              'Vanderlei',
+              'Gilson',
+              'Victor',
+              'Sivaldo',
+              'Geleia',
+            ]"
+          />
+        </template>
+      </UTable>
     </section>
   </div>
 </template>
@@ -34,6 +48,7 @@ import type { TableColumn } from "@nuxt/ui";
 
 const UBadge = resolveComponent("UBadge");
 const USelect = resolveComponent("USelect");
+const UInputDate = resolveComponent("UInputDate");
 
 type Payment = {
   date: string;
@@ -66,6 +81,9 @@ type Payment = {
 
 const statusOptions = ref(["Pago", "A Receber"]);
 const statusValue = ref("Pago");
+const valorTotal = ref(10);
+const custo = ref(5);
+const frete = ref(valorTotal.value - custo.value);
 
 const data = ref<Payment[]>([
   {
@@ -78,11 +96,11 @@ const data = ref<Payment[]>([
     produto: "AFR",
     qtd: 8,
     und: "M³",
-    custo: 1200,
+    custo: custo.value,
     motorista: "Geleia",
     status: statusValue.value,
-    frete: 560,
-    valorTotal: 1760,
+    frete: frete.value,
+    valorTotal: valorTotal.value,
   },
   {
     date: "2024-03-11T15:30:00",
@@ -94,11 +112,11 @@ const data = ref<Payment[]>([
     produto: "AFR",
     qtd: 8,
     und: "M³",
-    custo: 1200,
+    custo: custo.value,
     motorista: "Geleia",
     status: statusValue.value,
-    frete: 560,
-    valorTotal: 1760,
+    frete: frete.value,
+    valorTotal: valorTotal.value,
   },
   {
     date: "2024-03-11T15:30:00",
@@ -110,11 +128,11 @@ const data = ref<Payment[]>([
     produto: "AFR",
     qtd: 8,
     und: "M³",
-    custo: 1200,
+    custo: custo.value,
     motorista: "Geleia",
     status: statusValue.value,
-    frete: 560,
-    valorTotal: 1760,
+    frete: frete.value,
+    valorTotal: valorTotal.value,
   },
   {
     date: "2024-03-11T15:30:00",
@@ -126,11 +144,11 @@ const data = ref<Payment[]>([
     produto: "AFR",
     qtd: 8,
     und: "M³",
-    custo: 1200,
+    custo: custo.value,
     motorista: "Geleia",
     status: statusValue.value,
-    frete: 560,
-    valorTotal: 1760,
+    frete: frete.value,
+    valorTotal: valorTotal.value,
   },
   {
     date: "2024-03-11T15:30:00",
@@ -142,11 +160,11 @@ const data = ref<Payment[]>([
     produto: "AFR",
     qtd: 8,
     und: "M³",
-    custo: 1200,
+    custo: custo.value,
     motorista: "Geleia",
     status: statusValue.value,
-    frete: 560,
-    valorTotal: 1760,
+    frete: frete.value,
+    valorTotal: valorTotal.value,
   },
 ]);
 
