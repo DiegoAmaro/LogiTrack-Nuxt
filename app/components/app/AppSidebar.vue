@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex flex-col min-w-44 bg-neutral dark:bg-neutral-800 h-screen items-start"
+    class="fixed z-30 flex flex-col min-w-44 bg-neutral dark:bg-neutral-800 h-screen items-start"
   >
     <ULink
       class="text-4xl text-white flex mx-auto py-4 items-center gap-2 hover:text-white"
@@ -62,6 +62,11 @@ const menuItems = ref<NavigationMenuItem[]>([
     label: "Controle de Vendas",
     icon: "prime:book",
     to: "/app/controleDeVendas",
+  },
+  {
+    label: "Controle de OCs",
+    icon: "jam:document",
+    to: "/app/controleDeOCs",
   },
   {
     label: "Gastos Gerais",

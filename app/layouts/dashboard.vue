@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-screen">
     <AppSidebar></AppSidebar>
-    <div class="px-4 sm:px-6 py-3">
+    <div class="ml-40 sm:px-6 w-full">
       <slot></slot>
     </div>
   </div>
