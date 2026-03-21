@@ -3,7 +3,7 @@ export default defineAppConfig({
   description: "Sistema de Gestão de Fretes",
   ui: {
     colors: {
-      primary: "red",
+      primary: "blue",
       neutral: "neutral",
       secondary: "white",
     },

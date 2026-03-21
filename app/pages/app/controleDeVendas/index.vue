@@ -1,4 +1,4 @@
-<template>
+<template class="flex flex-col min-h-screen">
   <div class="ml-10 mt-10">
     <section>
       <div class="flex gap-3 items-center mb-2">
@@ -14,28 +14,123 @@
       >
     </section>
     <section>
-      <UTable
-        :data="data"
-        :columns="columns"
-        class="flex-1"
-        :ui="{ tr: ' py-1 px-4' }"
-      >
-        <template #motorista-cell="{ row }">
-          <USelect
-            placeholder="Selecione"
-            :items="[
-              'Rone',
-              'Vanderlei',
-              'Gilson',
-              'Victor',
-              'Sivaldo',
-              'Geleia',
-            ]"
-          />
-        </template>
-      </UTable>
+      <UTable :data="rows" :columns="columns" class="flex-1 z-2" />
     </section>
   </div>
+  <footer
+    class="fixed bottom-0 mt-auto ml-10 h-18 w-full z-20 bg-neutral-900 border-t-1 border-neutral-700"
+  >
+    <UModal
+      v-model:open="open"
+      title="Nova Venda"
+      description="Formulário para adicionar nova venda"
+      :ui="{ footer: 'justify-end' }"
+    >
+      <UButton
+        label="Adicionar Venda"
+        color="primary"
+        variant="outline"
+        class="bottom-5 rounded-full fixed"
+        icon="i-lucide-plus"
+      />
+      <template #body>
+        <div class="grid grid-cols-4 gap-4">
+          <UFormField label="Data">
+            <UInput v-model="form.date" class="w-27" />
+          </UFormField>
+          <UFormField label="NF">
+            <UInput v-model="form.nf" class="w-27" />
+          </UFormField>
+          <UFormField label="Pedido">
+            <UInput v-model="form.pedido" class="w-27" />
+          </UFormField>
+          <UFormField label="Cliente">
+            <UInput v-model="form.cliente" class="w-27" />
+          </UFormField>
+          <UFormField label="Cond.">
+            <UInput v-model="form.cond" class="w-27" />
+          </UFormField>
+          <UFormField label="Obs.">
+            <UInput v-model="form.obs" class="w-27" />
+          </UFormField>
+          <UFormField label="Produto">
+            <USelect
+              class="w-27"
+              placeholder="Selecione"
+              :items="[
+                'AFR',
+                'AMR',
+                'AGR',
+                'AML',
+                'A REC',
+                'B0',
+                'B1',
+                'B2',
+                'B3',
+                'PEDRA',
+                'PEDRA M',
+                'PO',
+              ]"
+              v-model="form.produto"
+            />
+          </UFormField>
+          <UFormField label="Qtd.">
+            <UInput v-model="form.qtd" class="w-27" />
+          </UFormField>
+          <UFormField label="Und.">
+            <USelect
+              placeholder="Selecione"
+              :items="['M³', 'TN', 'CARG']"
+              v-model="form.und"
+            />
+          </UFormField>
+          <UFormField label="Custo">
+            <UInput v-model="form.custo" class="w-27" />
+          </UFormField>
+          <UFormField label="Status">
+            <USelect
+              class="w-27"
+              placeholder="Selecione"
+              :items="['Pago', 'A Receber']"
+              v-model="form.status"
+            />
+          </UFormField>
+          <UFormField label="Motorista">
+            <USelect
+              class="w-27"
+              placeholder="Selecione"
+              :items="[
+                'Rone',
+                'Vanderlei',
+                'Gilson',
+                'Victor',
+                'Sivaldo',
+                'Geleia',
+              ]"
+              v-model="form.motorista"
+            />
+          </UFormField>
+          <UFormField label="Valor Total">
+            <UInput v-model="form.valorTotal" class="w-27" />
+          </UFormField>
+        </div>
+      </template>
+      <template #footer="{ close }">
+        <UButton
+          label="Cancelar"
+          color="neutral"
+          variant="outline"
+          @click="close"
+        />
+        <UButton
+          label="Adicionar"
+          color="primary"
+          type="submit"
+          @click="adicionarRegistro(close)"
+        />
+      </template>
+    </UModal>
+  </footer>
 </template>
 
 <script lang="ts" setup>
@@ -45,128 +140,57 @@ definePageMeta({
 
 import { h, resolveComponent } from "vue";
 import type { TableColumn } from "@nuxt/ui";
+import { ref, reactive } from "vue";
+
+const open = ref(false);
+
+const initialState = {
+  date: "",
+  nf: "",
+  pedido: "",
+  cliente: "",
+  cond: "",
+  obs: "",
+  produto: "",
+  qtd: 0,
+  und: "",
+  custo: 0,
+  status: "",
+  motorista: "",
+  valorTotal: 0,
+};
+
+const form = reactive({ ...initialState });
+
+const frete = ref(Number(form.valorTotal) - Number(form.custo));
+
+const inputDate = useTemplateRef("inputDate");
 
 const UBadge = resolveComponent("UBadge");
 const USelect = resolveComponent("USelect");
 const UInputDate = resolveComponent("UInputDate");
+const UPopover = resolveComponent("UPopover");
 
 type Payment = {
   date: string;
-  nf: number;
-  pedido: number;
+  nf: string;
+  pedido: string;
   cliente: string;
   cond: string;
   obs: string;
-  produto:
-    | "AFR"
-    | "AMR"
-    | "AGR"
-    | "AML"
-    | "A REC"
-    | "B0"
-    | "B1"
-    | "B2"
-    | "B3"
-    | "PEDRA"
-    | "PEDRA M"
-    | "PO";
+  produto: string;
   qtd: number;
-  und: "M³" | "TN" | "CARG";
+  und: string;
   custo: number;
   status: string;
-  motorista: "Rone" | "Vanderlei" | "Gilson" | "Victor" | "Sivaldo" | "Geleia";
-  frete: number;
+  motorista: string;
   valorTotal: number;
 };
 
 const statusOptions = ref(["Pago", "A Receber"]);
 const statusValue = ref("Pago");
-const valorTotal = ref(10);
-const custo = ref(5);
-const frete = ref(valorTotal.value - custo.value);
 
-const data = ref<Payment[]>([
-  {
-    date: "2024-03-11T15:30:00",
-    nf: 1234,
-    pedido: 5678,
-    cliente: "John Doe",
-    cond: "Berlim",
-    obs: "FGR",
-    produto: "AFR",
-    qtd: 8,
-    und: "M³",
-    custo: custo.value,
-    motorista: "Geleia",
-    status: statusValue.value,
-    frete: frete.value,
-    valorTotal: valorTotal.value,
-  },
-  {
-    date: "2024-03-11T15:30:00",
-    nf: 1234,
-    pedido: 5678,
-    cliente: "John Doe",
-    cond: "Berlim",
-    obs: "FGR",
-    produto: "AFR",
-    qtd: 8,
-    und: "M³",
-    custo: custo.value,
-    motorista: "Geleia",
-    status: statusValue.value,
-    frete: frete.value,
-    valorTotal: valorTotal.value,
-  },
-  {
-    date: "2024-03-11T15:30:00",
-    nf: 1234,
-    pedido: 5678,
-    cliente: "John Doe",
-    cond: "Berlim",
-    obs: "FGR",
-    produto: "AFR",
-    qtd: 8,
-    und: "M³",
-    custo: custo.value,
-    motorista: "Geleia",
-    status: statusValue.value,
-    frete: frete.value,
-    valorTotal: valorTotal.value,
-  },
-  {
-    date: "2024-03-11T15:30:00",
-    nf: 1234,
-    pedido: 5678,
-    cliente: "John Doe",
-    cond: "Berlim",
-    obs: "FGR",
-    produto: "AFR",
-    qtd: 8,
-    und: "M³",
-    custo: custo.value,
-    motorista: "Geleia",
-    status: statusValue.value,
-    frete: frete.value,
-    valorTotal: valorTotal.value,
-  },
-  {
-    date: "2024-03-11T15:30:00",
-    nf: 1234,
-    pedido: 5678,
-    cliente: "John Doe",
-    cond: "Berlim",
-    obs: "FGR",
-    produto: "AFR",
-    qtd: 8,
-    und: "M³",
-    custo: custo.value,
-    motorista: "Geleia",
-    status: statusValue.value,
-    frete: frete.value,
-    valorTotal: valorTotal.value,
-  },
-]);
+const rows = ref<Payment[]>([]);
 
 const columns: TableColumn<Payment>[] = [
   {
@@ -210,7 +234,7 @@ const columns: TableColumn<Payment>[] = [
   },
   {
     accessorKey: "und",
-    header: "Uni.",
+    header: "Und.",
   },
   {
     accessorKey: "custo",
@@ -237,8 +261,7 @@ const columns: TableColumn<Payment>[] = [
         Pago: "success" as const,
         "A Receber": "warning" as const,
       }[row.getValue("status") as string];
-
-      return h(USelect, { placeholder: "Selecione", items: statusOptions });
+      return h(UBadge, { label: row.getValue("status"), color });
     },
   },
   {
@@ -280,4 +303,12 @@ const columns: TableColumn<Payment>[] = [
     },
   },
 ];
+const adicionarRegistro = (close?: () => void) => {
+  rows.value.push({ ...form });
+
+  // Reseta o objeto form para o estado inicial sem perder a reatividade
+  Object.assign(form, initialState);
+
+  if (close) close();
+};
 </script>
