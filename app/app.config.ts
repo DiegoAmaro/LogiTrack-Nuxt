@@ -6,6 +6,9 @@ export default defineAppConfig({
       primary: "blue",
       neutral: "neutral",
       secondary: "white",
+      success: "emerald",
+      warning: "amber",
+      error: "rose",
     },
   },
 });
