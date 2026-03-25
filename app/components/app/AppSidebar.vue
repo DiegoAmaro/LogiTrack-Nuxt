@@ -23,7 +23,21 @@
       >
       <hr class="w-full border-neutral-700" />
     </div>
-
+    <div class="mx-auto py-2 flex flex-col w-full px-2 gap-1 flex-1">
+      <UButton
+        v-for="m in menuItems1"
+        :icon="m.icon"
+        variant="ghost"
+        color="neutral"
+        active-variant="solid"
+        active-color="secondary"
+        class="text-white text-xs hover:bg-neutral-100 dark:hover:bg-neutral-700 dark:hover:text-black"
+        :to="m.to"
+        >{{ m.label }}</UButton
+      >
+      <hr class="w-full border-neutral-700" />
+    </div>
+    <hr class="w-full border-neutral-700" />
     <div class="w-full flex flex-col px-2 gap-1 py-4">
       <UButton
         icon="i-material-symbols-settings-outline"
@@ -72,6 +86,23 @@ const menuItems = ref<NavigationMenuItem[]>([
     label: "Gastos Gerais",
     icon: "i-material-symbols-credit-card-outline",
     to: "/app/gastosGerais",
+  },
+]);
+const menuItems1 = ref<NavigationMenuItem[]>([
+  {
+    label: "Entrada e Saída",
+    icon: "streamline-ultimate:accounting-coins",
+    to: "/app/entradaESaida",
+  },
+  {
+    label: "Contas",
+    icon: "mingcute:paper-line",
+    to: "/app/contas",
+  },
+  {
+    label: "Controle de Estoque",
+    icon: "lsicon:management-stockout-outline",
+    to: "/app/controleDeEstoque",
   },
 ]);
 </script>
