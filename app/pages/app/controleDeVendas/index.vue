@@ -142,12 +142,7 @@
             variant="outline"
             @click="close"
           />
-          <UButton
-            label="Adicionar"
-            color="primary"
-            type="submit"
-            @click="adicionarRegistro(close)"
-          />
+          <UButton label="Adicionar" color="primary" @click="enviarVenda" />
         </div>
       </template>
     </UModal>
@@ -164,7 +159,6 @@ import type { TableColumn } from "@nuxt/ui";
 import { ref, reactive } from "vue";
 
 const open = ref(false);
-
 const initialState = {
   date: "",
   nf: "",
@@ -357,4 +351,18 @@ const adicionarRegistro = (close?: () => void) => {
 
   if (close) close();
 };
+
+async function enviarVenda() {
+  try {
+    const resposta = await $fetch("/api/vendas", {
+      method: "POST",
+      body: form,
+    });
+    adicionarRegistro();
+    console.log("Resposta do servidor:", resposta);
+    open.value = false; // Fecha o modal se der certo
+  } catch (err) {
+    console.error("Erro ao enviar:", err);
+  }
+}
 </script>

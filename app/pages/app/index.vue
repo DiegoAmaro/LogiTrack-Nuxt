@@ -2,7 +2,15 @@
   <div>
     <div class="flex justify-between items-center py-4">
       <div>
-        <h3 class="text-2xl font-bold">Dashboard Overview</h3>
+        <div>
+          <h1>Vendas do LogiTrack</h1>
+          <ul>
+            <li v-for="venda in vendas" :key="venda.id">
+              {{ venda.cliente }} - R$ {{ venda.valor }}
+            </li>
+          </ul>
+        </div>
+        <h3 class="text-2xl font-bold">Batatas</h3>
         <p class="text-sm text-muted">
           Welcome back! Here what's happening at your restaurant today.
         </p>
@@ -130,6 +138,7 @@
 definePageMeta({
   layout: "dashboard",
 });
+const { data: vendas } = await useFetch("/api/vendas");
 const card = ref([
   {
     title: "Active Tables",
